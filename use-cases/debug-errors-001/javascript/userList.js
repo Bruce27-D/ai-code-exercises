@@ -1,32 +1,34 @@
 // userList.js
 function renderUserList(users) {
   const userListElement = document.getElementById('user-list');
+  if (!userListElement) return;
+
   userListElement.innerHTML = '';
 
-  // Loop through users, up to a maximum of 5
+  // Always render 5 cards
   for (let i = 0; i < 5; i++) {
     const user = users[i];
 
-    // Now safe because we only process existing users
-    const userName = user.name;
-    const userEmail = user.email;
-
     const userElement = document.createElement('div');
-    userElement.innerHTML = `
-      <div class="user-card">
-        <h3>${userName}</h3>
-        <p>${userEmail}</p>
-      </div>
-    `;
+
+    if (user) {
+      userElement.innerHTML = `
+        <div class="user-card">
+          <h3>${user.name}</h3>
+          <p>${user.email}</p>
+        </div>
+      `;
+    } else {
+      userElement.innerHTML = `
+        <div class="user-card">
+          <h3>No User</h3>
+          <p>No Email</p>
+        </div>
+      `;
+    }
 
     userListElement.appendChild(userElement);
   }
-}
-
-// dashboard.js
-function loadDashboard() {
-  renderUserList(sampleResponse.users);
-
 }
 
 // Sample data from API
@@ -38,7 +40,12 @@ const sampleResponse = {
   ]
 };
 
-// Export the loadDashboard function for testing
+// This is what the test is calling
+function loadDashboard() {
+  renderUserList(sampleResponse.users);
+}
+
+// Export for testing
 module.exports = {
   loadDashboard
 };

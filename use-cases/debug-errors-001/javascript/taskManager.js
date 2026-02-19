@@ -1,98 +1,83 @@
 // taskManager.js
-// Global variable to store tasks
+
 let tasks = [];
 
-// Function to initialize the application
+// Initialize tasks
 function initApp() {
   console.log("Task Manager initialized");
   tasks = [
     { id: 1, name: "Complete project proposal", completed: false },
     { id: 2, name: "Meeting with team", completed: true }
   ];
-  displayTasks();
-  return tasks; // Return for testing
+  return tasks;
 }
 
-// Function to add a new task
+// Add task
 function addTask(taskName) {
-  let tasks = { id: Date.now(), name: taskName, completed: false };  // Notice the 'let tasks' here!
-  console.log("Task added:", tasks);
-  displayTasks();
-  return tasks; // Return for testing
+  const newTask = {
+    id: Date.now(),
+    name: taskName,
+    completed: false
+  };
+
+  tasks.push(newTask);
+  console.log("Task added:", newTask);
+
+  return tasks;
 }
 
-// Function to display all tasks
+// Display tasks
 function displayTasks() {
-  // Check if we're in a browser environment
   if (typeof document !== 'undefined') {
     const taskListElement = document.getElementById('task-list');
     if (taskListElement) {
-      taskListElement.innerHTML = "";
+      taskListElement.innerHTML = '';
 
       tasks.forEach(task => {
         const taskElement = document.createElement('div');
-        taskElement.innerHTML = `
-          <div class="task-item ${task.completed ? 'completed' : ''}">
-            <span>${task.name}</span>
-            <button onclick="toggleTaskStatus(${task.id})">Toggle</button>
-            <button onclick="deleteTask(${task.id})">Delete</button>
-          </div>
-        `;
+        taskElement.textContent = task.name;
         taskListElement.appendChild(taskElement);
       });
     }
-  } else {
-    tasks.forEach(task => {
-      console.log(task.name);
-    });
   }
-  return tasks; // Return for testing
+
+  return tasks;
 }
 
-// Toggle task status
+// Toggle task
 function toggleTaskStatus(taskId) {
-  tasks = tasks.map(task => {
-    if (task.id === taskId) {
-      return { ...task, completed: !task.completed };
-    }
-    return task;
-  });
-  displayTasks();
-  return tasks; // Return for testing
+  tasks = tasks.map(task =>
+    task.id === taskId
+      ? { ...task, completed: !task.completed }
+      : task
+  );
+
+  return tasks;
 }
 
-// Delete a task
+// Delete task
 function deleteTask(taskId) {
   tasks = tasks.filter(task => task.id !== taskId);
-  displayTasks();
-  return tasks; // Return for testing
+  return tasks;
 }
 
-// Function to get all tasks (for testing)
+// Get all tasks
 function getAllTasks() {
   return tasks;
 }
 
-// Function to reset tasks (for testing)
+// Reset tasks
 function resetTasks() {
   tasks = [];
   return tasks;
 }
 
-// Initialize the app when page loads (only in browser environment)
-if (typeof window !== 'undefined') {
-  window.onload = initApp;
-}
-
-// Export functions for testing
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    initApp,
-    addTask,
-    displayTasks,
-    toggleTaskStatus,
-    deleteTask,
-    getAllTasks,
-    resetTasks
-  };
-}
+module.exports = {
+  initApp,
+  addTask,
+  displayTasks,
+  toggleTaskStatus,
+  deleteTask,
+  getAllTasks,
+  resetTasks
+};
